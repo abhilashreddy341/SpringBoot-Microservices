@@ -1,9 +1,9 @@
-package com.example.springBoot.Repository;
+package com.egiants.user.springjpadao;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import com.egiants.User; 
 
-import com.example.springBoot.Demo.User;
 
 public interface UserRepository  extends JpaRepository<User, String>{
 

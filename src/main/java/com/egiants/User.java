@@ -1,10 +1,9 @@
-package com.example.springBoot.Demo;
+package com.egiants;
 
 
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
@@ -30,6 +29,19 @@ public class User {
 	private String password;
 	@Column
 	private String PhoneNumber;
+	
+	public User() {
+		
+	}
+	
+	public User(String emailAddress,String firstName,String lastName,String password,String phoneNumber) {
+		this.emailAddress= emailAddress;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.password = password;
+		this.PhoneNumber = phoneNumber;
+	}
+	
 	public String getEmailAddress() {
 		return emailAddress;
 	}
