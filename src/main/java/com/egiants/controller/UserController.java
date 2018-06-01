@@ -30,7 +30,7 @@ public class UserController {
 	}
 
     @GetMapping("/user/{email}")
-    public Optional<User> getUser(@PathVariable String email) throws Exception {
+    public User getUser(@PathVariable String email) throws Exception {
 		return userService.getUser(email);
 	}
 

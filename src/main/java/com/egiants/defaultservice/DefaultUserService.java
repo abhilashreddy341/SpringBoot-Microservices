@@ -3,6 +3,7 @@ package com.egiants.defaultservice;
 import java.util.List;
 import java.util.Optional;
 import com.egiants.User;
+import com.egiants.exceptions.ResourceNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class DefaultUserService implements UserService {
 		  return userDao.getUsers();
 	 }
 	 
-	 public Optional<User> getUser(String email) throws Exception {
-		 return userDao.getUser(email);
+	 public User getUser(String email) throws Exception {
+			 return userDao.getUser(email);
 	 }
 	 
 	 public boolean deleteUser(String email) throws Exception {

@@ -2,6 +2,7 @@ package com.bc.spr;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockitoSession;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -14,67 +15,108 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 import com.egiants.user.dao.UserDao;
 import com.egiants.User;
+import com.egiants.defaultservice.DefaultUserService;
+import com.egiants.exceptions.ResourceNotFoundException;
 import com.egiants.service.UserService;
+
 
 public class UserServiceTest {
 	
+	private static final String EMAIL = "xyz@gmail.com";
+	
 	private User user;
-	private List<Object> users;
+	private List<User> users ;
 	
-	
-	UserDao userDao = mock(UserDao.class); 
-	
+	@Mock
+	private UserDao userDao;
+	 
 	@InjectMocks
-	UserService userService;
+	private DefaultUserService userService;
 	
 	@Before
-	public void setUp() {
-//		this.user = Mockito.mock(User.class);
-//		this.users = Arrays.asList(user);
-//		Mockito.doReturn("firstName")
-//		.when(this.user)
-//		.getFirstName();
-		User user = new User("abhilash@gmail.com","abhilash","gaddam","heythere","1234567890");
+	public void setUp() throws Exception {
+		
+		this.user = Mockito.mock(User.class);
+		Mockito.doReturn("abhilash").when(this.user).getFirstName();
+		Mockito.doReturn("abhilash@gmail.com").when(this.user).getEmailAddress();
+		//this.users = new ArrayList<>();
+		MockitoAnnotations.initMocks(this);
+		users = new ArrayList<User>();
+		users.add(user);
+	
 	}
 
 	@Test
 	public void testGetUsers() throws Exception {
-		List<User> ul = new ArrayList<User>();
-		ul.add(user);
-		Mockito.when(userDao.getUsers()).thenReturn(ul);
-		assertEquals(ul,userService.getUsers());
 		
+		Mockito.doReturn(users)
+		.when(this.userDao)
+		.getUsers();
 		
+	    List<User> actualUsers = userService.getUsers();
+	    assertEquals(user.getEmailAddress(),actualUsers.get(0).getEmailAddress());
+	    
+	}
+	
+//	@Test
+//	public void testGetUser() throws Exception {
+//		
+//		Mockito.doReturn(user)
+//		.when(this.userDao)
+//		.getUser(EMAIL);
+//		
+//	    User actualUser = userService.getUser(EMAIL);
+//	    assertEquals("abc",actualUser.getFirstName());
+//	    
+//	}
+	
+	@Test(expected = ResourceNotFoundException.class)
+	public void testGetUserNotFound() throws Exception {
+		
+		Mockito.doThrow(Exception.class)
+		.when(this.userDao)
+		.getUser(EMAIL);
+		
+	    this.userService.getUser(EMAIL);
+	    
 	}
 
 	@Test
 	public void testGetUser() throws Exception {
+		
 		Mockito.doReturn(user)
-		.when(userDao.getUser("abhilash@gmail.com"));
-		assertEquals(user,userService.getUser("abhilash@gmail.com"));
+		 .when(userDao)
+		 .addUser(Mockito.any(User.class));
+		Mockito.when(userDao.deleteUser("abhilash@gmail.com")).thenReturn(true);
+		assertEquals(user,userDao  .addUser(user));
 	}
 
 	@Test
 	public void testDeleteUser() throws Exception {
-		
+		Mockito.doReturn(true)
+		 .when(userDao)
+		 .deleteUser(Mockito.anyString());
 		Mockito.when(userDao.deleteUser("abhilash@gmail.com")).thenReturn(true);
 		assertTrue(userService.deleteUser("abhilash@gmail.com"));
-		
 	}
 
 	@Test
 	public void testUpdateUser() throws Exception {
-		
-		Mockito.when(userDao.updateUser(user)).thenReturn(user);
+		Mockito.doReturn(user)
+		 .when(userDao)
+		 .updateUser(Mockito.any(User.class));	
 		assertEquals(user,userService.updateUser(user));
 	}
 
 	@Test
 	public void testAddUser() throws Exception {
-		
-		Mockito.when(userDao.addUser(user)).thenReturn(user);
+		Mockito.doReturn(user)
+		 .when(userDao)
+		 .addUser(Mockito.any(User.class));
 		assertEquals(user,userService.addUser(user));
 	}
 

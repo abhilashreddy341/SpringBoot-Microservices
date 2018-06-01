@@ -23,11 +23,8 @@ public class SpringJpaUserDao implements UserDao{
 		 throw new Exception("No user Exists");
 	}
 	
-	 public Optional<User> getUser(String email) throws Exception {
-		 if(!userRepository.findById(email).isPresent()) {
-				throw new Exception("No user Found with given Email");
-			}
-	    	return userRepository.findById(email);
+	 public User getUser(String email) throws Exception {
+		 return userRepository.getOne(email);
 	 }
 	 
 	 public boolean deleteUser(String email) throws Exception {

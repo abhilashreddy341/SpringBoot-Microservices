@@ -11,7 +11,7 @@ public interface UserService {
 	
 	List<User> getUsers() throws Exception;
      
-	Optional<User> getUser(String email) throws Exception;
+	User getUser(String email) throws Exception;
 	
 	boolean deleteUser(String email) throws Exception;
 	
